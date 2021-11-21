@@ -14,7 +14,7 @@
             <div class="vx-col w-full sm:w-5/6 flex sm:items-center sm:flex-row flex-col">
                 <div class="flex items-center">
                     <vs-checkbox v-model="isDone" class="w-8 m-0 vs-checkbox-small" @click.stop></vs-checkbox>
-                    <h6 class="todo-title" :class="{'line-through': isDone}">{{ title }}</h6>
+                    <h6 class="todo-title" :class="{'line-through': isDone}">{{ errorData.errorModel.message}}</h6>
                 </div>
                 <div class="todo-tags sm:ml-2 sm:my-0 my-2 flex">
                     <vs-chip v-for="(tag, index) in tags" :key="index">
@@ -44,6 +44,9 @@ export default{
         todoItemId: {
             type: Number,
             required: true,
+        },
+        errorData:{
+
         }
     },
     data() {

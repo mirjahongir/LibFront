@@ -86,7 +86,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
 
             <the-footer></the-footer>

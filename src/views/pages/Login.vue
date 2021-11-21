@@ -55,7 +55,7 @@
 
                 <vs-input
                   data-vv-validate-on="blur"
-                  v-validate="'required|min:6|max:10'"
+                  v-validate="'required|min:4|max:20'"
                   type="password"
                   name="password"
                   icon="icon icon-lock"
@@ -86,7 +86,7 @@
                   >Login</vs-button
                 >
 
-                <!-- <SocialLogin></SocialLogin> -->
+               
               </div>
             </div>
           </div>
@@ -97,19 +97,16 @@
 </template>
 
 <script>
-import SocialLogin from "../components/extra-components/SocialLogin";
 
 export default {
   data() {
     return {
-      email: "demo@demo.com",
-      password: "demodemo",
-      checkbox_remember_me: false,
+      email: "admin",
+      password: "admin",
+      checkbox_remember_me: true,
     };
   },
-  components: {
-    SocialLogin,
-  },
+
   computed: {
     validateForm() {
       return !this.errors.any() && this.email != "" && this.password != "";
@@ -124,6 +121,9 @@ export default {
       this.$api.post("/apimate/Account/Login", loginModel).then(
         (response) => {
           console.log(response);
+          console.log(response.accessToken);
+          this.$api.setToken(response.accessToken, response.refreshToken);
+          this.$router.push({path:"/"});
         },
         (err) => {
           console.log(err);

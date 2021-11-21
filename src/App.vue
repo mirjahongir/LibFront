@@ -57,6 +57,11 @@ export default {
   beforeDestroy() {
     window.removeEventListener('resize', this.handleWindowResize);
   },
+  created(){
+    if(this.$api.checkToken()){
+
+    }
+  }
 }
 
 </script>

@@ -17,6 +17,9 @@ const state = {
     sidebarWidth: "default",
     reduceButton: themeConfig.sidebarCollapsed,
     bodyOverlay: false,
+    projects:[],
+    selectProject:null
+    ,
     sidebarItemsMin: false,
     theme: themeConfig.theme || 'light',
     navbarSearchAndPinList: navbarSearchAndPinList,

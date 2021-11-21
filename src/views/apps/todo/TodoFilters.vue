@@ -9,19 +9,33 @@
 
 
 <template>
-    <div class="todo__filters-container">
+  <div class="todo__filters-container">
+    <!-- all -->
 
-        <!-- all -->
-        <div class="px-6 py-4">
-            <div class="flex cursor-pointer" :class="{'text-primary': todoFilter == 'all'}" @click="applyTodoFilter('all')">
-                <feather-icon icon="MailIcon" :svgClasses="[{'text-primary stroke-current': todoFilter == 'all'}, 'h-6 w-6']"></feather-icon>
-                <span class="text-lg ml-3">All</span>
-            </div>
-        </div>
+    <div class="px-6 py-4"   v-for="(item, j) in $store.state.projects"  :key="j">
+      <div
+      
+        class="flex cursor-pointer"
+        :class="{ 'text-primary': todoFilter == 'all' }"
+       
+      >
+        <feather-icon
+          icon="MailIcon"
+          :svgClasses="[
+            { 'text-primary stroke-current': todoFilter == 'all' },
+            'h-6 w-6',
+          ]"
+        ></feather-icon>
+        <span class="text-lg ml-3" @click="changeProject(item)">{{
+          item.name
+        }}</span>
+      </div>
+       <vs-divider></vs-divider>
+    </div>
 
-        <vs-divider></vs-divider>
-
-        <!-- starred -->
+   
+    {{ temp }}
+    <!-- starred 
         <div class="px-6 py-4">
             <h5>Filters</h5>
 
@@ -34,7 +48,7 @@
 
         </div>
 
-        <vs-divider></vs-divider>
+       
 
         <div class="px-6 py-4">
             <h5>Labels</h5>
@@ -44,37 +58,53 @@
                     <span class="text-lg" :class="{'text-primary': todoFilter == tag.value}">{{ tag.text }}</span>
                 </div>
             </div>
-        </div>
-
-    </div>
+        </div>-->
+  </div>
 </template>
 
 <script>
-
-export default{
-    data() {
-        return {
-            todoFilters: [
-                { filterName: 'Starred', filter: 'starred', icon: 'StarIcon' },
-                { filterName: 'Important', filter: 'important', icon: 'InfoIcon' },
-                { filterName: 'Done', filter: 'done', icon: 'CheckIcon' },
-                { filterName: 'Trashed', filter: 'trashed', icon: 'TrashIcon' },
-            ]
-        }
+export default {
+  data() {
+    return {
+      query: {
+        id: "",
+        name: "",
+        pageNumber: 0,
+        pageSize: 100,
+      },
+      temp: 0,
+    };
+  },
+  computed: {
+    todoTags() {
+      return this.$store.state.todo.todoTags;
     },
-    computed: {
-        todoTags() {
-            return this.$store.state.todo.todoTags;
+    todoFilter() {
+      return this.$store.state.todo.todoFilter;
+    },
+  },
+  methods: {
+    getProjects() {
+      let query = new URLSearchParams(this.query);
+      console.log(query);
+      this.$api.get("/apimate/Project/Get?" + query).then(
+        (response) => {
+          console.log(response);
+          this.temp++;
+          this.$store.state.projects = response;
         },
-        todoFilter() {
-            return this.$store.state.todo.todoFilter;
+        (err) => {
+          this.$store.getters.errorParse(this, err);
         }
+      );
     },
-    methods: {
-        applyTodoFilter(filterName) {
-            this.$store.dispatch('todo/applyTodoFilter', filterName);
-            this.$emit('closeSidebar', false);
-        },
+    changeProject(project) {
+      this.$emit("changeProject", project);
+      
     },
-}
+  },
+  mounted() {
+    this.getProjects();
+  },
+};
 </script>
